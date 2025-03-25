@@ -1,0 +1,31 @@
+<main class="text-center flex flex-col items-center justify-center gap-6 p-10">
+    <h1 class="text-4xl font-bold">座席表</h1>
+    <section>
+        <table class="table-fixed w-full mx-auto border-2 border-gray-300 rounded-md border-collapse">
+            <tbody class="text-center">
+                <tr>
+                    <% 5.times do |i| %>
+                    <% if i == 2 %>
+                    <td class="w-1/5 text-center border-2 border-gray-300 hover:bg-gray-100 text-xl py-2">スクリーン</td>
+                    <% else %>
+                    <td class="w-1/5 text-center border-2 border-gray-300 hover:bg-gray-100 text-xl py-2">.</td>
+                    <% end %>
+                    <% end %>
+                </tr>
+                <tr>
+                    <% 5.times do |i| %>
+                    <td class="w-1/5 text-center border-2 border-gray-300 border-b-gray-700 hover:bg-gray-100 text-xl py-2">:--:</td>
+                    <% end %>
+                </tr>
+                <% @sheetGroups.each do |row, sheetGroup| %>
+                <tr>
+                    <% sheetGroup.each do |sheet| %>
+                    <td class="w-1/5 text-center border-2 border-gray-700 hover:bg-gray-100 text-xl py-2"><%= sheet.column %><%= sheet.row %></td>
+                    <% end %>
+                </tr>
+                <% end %>
+            </tbody>
+        </table>
+
+    </section>
+</main>

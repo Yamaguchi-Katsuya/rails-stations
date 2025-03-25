@@ -9,7 +9,14 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  resources :movies, only: [:index, :show]
+  resources :movies, only: [:index, :show] do
+    resources :schedules do
+      resources :reservations, only: [:new]
+    end
+  end
+  resources :reservations, only: [:create]
+
+  get "movies/:id/reservation", to: "movies#reservation", as: "movie_reservation"
   namespace :admin do
     resources :movies, only: [:index, :new, :create, :show, :edit, :update, :destroy] do
       resources :schedules, only: [:new, :create]

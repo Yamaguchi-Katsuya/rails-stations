@@ -1,0 +1,39 @@
+<main class="text-center flex flex-col items-center justify-center gap-6 p-10">
+    <h1 class="text-4xl font-bold">座席表</h1>
+    <section>
+        <table class="table-fixed w-full mx-auto border-2 border-gray-300 rounded-md border-collapse">
+            <tbody class="text-center">
+                <tr>
+                    <% 5.times do |i| %>
+                    <% if i == 2 %>
+                    <td class="w-1/5 text-center border-2 border-gray-300 bg-gray-700 text-xl py-2 text-white">スクリーン</td>
+                    <% else %>
+                    <td class="w-1/5 text-center border-2 border-gray-300 bg-gray-700 text-xl py-2 text-white">.</td>
+                    <% end %>
+                    <% end %>
+                </tr>
+                <tr>
+                    <% 5.times do |i| %>
+                    <td class="w-1/5 text-center border-2 border-gray-300 border-b-gray-700 bg-gray-700 text-xl py-2 text-white">:--:</td>
+                    <% end %>
+                </tr>
+                <% @sheetGroups.each do |row, sheetGroup| %>
+                <tr>
+                    <% sheetGroup.each do |sheet| %>
+                    <% if @reserved_sheets.include?(sheet.id) %>
+                    <td class="w-1/5 text-center border-2 border-gray-700 bg-red-500 text-xl text-white py-2">
+                        <%= sheet.column.to_s + sheet.row.to_s %>
+                    </td>
+                    <% else %>
+                    <td class="w-1/5 text-center border-2 border-gray-700 hover:bg-gray-100 text-xl py-2">
+                        <%= link_to (sheet.column.to_s + sheet.row.to_s), new_movie_schedule_reservation_path(@movie, @schedule, date: @date, sheet_id: sheet.id), class: "text-blue-500 hover:text-blue-600" %>
+                    </td>
+                    <% end %>
+                    <% end %>
+                </tr>
+                <% end %>
+            </tbody>
+        </table>
+
+    </section>
+</main>

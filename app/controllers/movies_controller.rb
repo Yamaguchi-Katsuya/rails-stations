@@ -19,4 +19,27 @@ class MoviesController < ApplicationController
     @schedules = @movie.schedules
     render "movies/show"
   end
+
+  def reservation
+    @movie = Movie.find(params[:id])
+    @date = params[:date]
+
+    # 必要なパラメータがあるかチェック
+    if params[:schedule_id].blank? || params[:date].blank?
+      redirect_to movie_path(@movie), alert: "スケジュールと日付が必要です"
+      return
+    end
+
+    @schedule = @movie.schedules.find_by(id: params[:schedule_id])
+    unless @schedule
+      redirect_to movie_path(@movie), alert: "上映スケジュールが見つかりません"
+      return
+    end
+
+    @reserved_sheets = Reservation.reserved_sheets(@schedule.id, @date)
+    @sheets = Sheet.order(column: :asc, row: :asc)
+    @sheetGroups = @sheets.group_by(&:row)
+
+    render "movies/reservation"
+  end
 end

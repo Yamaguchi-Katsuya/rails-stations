@@ -1,6 +1,11 @@
-<main class="mx-auto text-center">
+<main class="mx-auto text-center flex flex-col items-center gap-4">
     <h1 class="my-8 text-4xl font-bold">映画一覧</h1>
 
+    <%= link_to "映画追加", new_admin_movie_path, class: "bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600" %>
+
+    <% if @movies.empty? %>
+    <p>映画がありません</p>
+    <% else %>
     <table class="mx-auto border-collapse border border-gray-300 table-auto">
         <thead>
             <tr>
@@ -34,4 +39,5 @@
             <% end %>
         </tbody>
     </table>
+    <% end %>
 </main>

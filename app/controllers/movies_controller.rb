@@ -8,10 +8,15 @@ class MoviesController < ApplicationController
     end
 
     if params[:keyword].present?
-      keyword = "%#{params[:keyword]}%"
-      @movies = @movies.where("name LIKE ? OR description LIKE ?", keyword, keyword)
+      @movies = @movies.search(params[:keyword])
     end
 
     render "movies/index"
+  end
+
+  def show
+    @movie = Movie.find(params[:id])
+    @schedules = @movie.schedules
+    render "movies/show"
   end
 end

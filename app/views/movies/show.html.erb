@@ -1,0 +1,21 @@
+<main class="mx-auto text-center flex flex-col items-center gap-6 justify-center py-10">
+    <h1 class="text-4xl font-bold"><%= @movie.name %>の詳細</h1>
+    <section class="flex flex-col items-center gap-6 w-1/2 mx-auto">
+        <div class="mx-auto">
+            <%= image_tag @movie.image_url, class: "w-auto rounded-md text-center" %>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+            <p><%= @movie.description %></p>
+            <p>公開年：<%= @movie.year %></p>
+            <p>上映状況：<%= @movie.is_showing ? "上映中" : "上映予定" %></p>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+            <h2 class="text-2xl font-bold">上映時間</h2>
+            <ul>
+                <% @movie.schedules.each do |schedule| %>
+                <li><%= schedule.start_time.strftime("%Y/%m/%d %H:%M") %> - <%= schedule.end_time.strftime("%H:%M") %></li>
+                <% end %>
+            </ul>
+        </div>
+    </section>
+</main>

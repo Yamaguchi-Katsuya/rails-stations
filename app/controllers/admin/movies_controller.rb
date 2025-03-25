@@ -1,12 +1,10 @@
 class Admin::MoviesController < ApplicationController
   def index
     @movies = Movie.all
-    render "admin/movies/index"
   end
 
   def new
     @movie = Movie.new
-    render "admin/movies/new"
   end
 
   def create
@@ -19,9 +17,16 @@ class Admin::MoviesController < ApplicationController
     end
   end
 
+  def show
+    @movie = Movie.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to admin_movies_path, alert: "映画が見つかりません"
+  end
+
   def edit
     @movie = Movie.find(params[:id])
-    render "admin/movies/edit"
+  rescue ActiveRecord::RecordNotFound
+    redirect_to admin_movies_path, alert: "映画が見つかりません"
   end
 
   def update

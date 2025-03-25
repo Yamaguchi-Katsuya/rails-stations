@@ -1,0 +1,22 @@
+<main class="mx-auto text-center">
+    <h1 class="my-8 text-4xl font-bold"><%= @movie.name %>の詳細</h1>
+    <div class="flex flex-col items-center gap-4">
+        <p>タイトル: <%= @movie.name %></p>
+        <p>公開年: <%= @movie.year %></p>
+        <p>概要: <%= @movie.description %></p>
+        <p>上映中: <%= @movie.is_showing ? "上映中" : "上映中止" %></p>
+        <%= link_to "映画情報編集", edit_admin_movie_path(@movie), class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
+    </div>
+    <h2 class="my-8 text-2xl font-bold">上映スケジュール</h2>
+    <div class="flex flex-col items-center gap-4">
+        <ul>
+            <% @movie.schedules.each do |schedule| %>
+            <li>
+                <%= schedule.start_time.strftime("%Y/%m/%d %H:%M") %> - <%= schedule.end_time.strftime("%H:%M") %>
+                <%= link_to "編集", edit_admin_schedule_path(schedule), class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
+            </li>
+            <% end %>
+        </ul>
+        <%= link_to "上映スケジュール追加", new_admin_movie_schedule_path(@movie), class: "bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600" %>
+    </div>
+</main>

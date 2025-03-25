@@ -1,0 +1,42 @@
+<main class="mx-auto text-center">
+  <h1 class="my-8 text-4xl font-bold">映画を追加</h1>
+
+  <%= form_with model: @movie, url: admin_movies_path, method: :post, class: "flex flex-col items-center gap-4 w-1/2 mx-auto" do |form| %>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+      <%= form.label :name, "タイトル", class: "col-span-1" %>
+      <%= form.text_field :name, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+      <% @movie.errors.full_messages_for(:name).each do |msg| %>
+        <div class="error-text"><%= msg %></div>
+      <% end %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+      <%= form.label :year, "公開年", class: "col-span-1" %>
+      <%= form.text_field :year, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+      <% @movie.errors.full_messages_for(:year).each do |msg| %>
+        <div class="error-text"><%= msg %></div>
+      <% end %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+      <%= form.label :description, "概要", class: "col-span-1" %>
+      <%= form.text_area :description, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+      <% @movie.errors.full_messages_for(:description).each do |msg| %>
+        <div class="error-text"><%= msg %></div>
+      <% end %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+      <%= form.label :image_url, "画像URL", class: "col-span-1" %>
+      <%= form.text_field :image_url, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+      <% @movie.errors.full_messages_for(:image_url).each do |msg| %>
+        <div class="error-text"><%= msg %></div>
+      <% end %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+      <%= form.label :is_showing, "上映中", class: "col-span-1" %>
+      <%= form.check_box :is_showing, true_value: 1, false_value: 0, class: "border-2 border-gray-300 rounded-md p-2 col-span-1" %>
+      <% @movie.errors.full_messages_for(:is_showing).each do |msg| %>
+        <div class="error-text"><%= msg %></div>
+      <% end %>
+    </div>
+    <%= form.submit "作成", class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
+  <% end %>
+</main>

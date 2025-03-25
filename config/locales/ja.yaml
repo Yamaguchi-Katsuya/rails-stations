@@ -1,0 +1,13 @@
+ja:
+  activerecord:
+    attributes:
+      movie:
+        name: "タイトル"
+        year: "公開年"
+        description: "概要"
+        image_url: "画像URL"
+        is_showing: "上映中"
+    errors:
+      messages:
+        uniqueness: "%{attribute}はすでに存在します"
+        blank: "%{attribute}を入力してください"

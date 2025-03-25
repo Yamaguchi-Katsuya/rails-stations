@@ -1,0 +1,30 @@
+<main class="mx-auto text-center flex flex-col items-center gap-6 justify-center py-10">
+  <h1 class="text-4xl font-bold">映画一覧</h1>
+  <%= form_with url: movies_path, class: "flex flex-col items-center gap-4", method: :get do |form| %>
+    <div class="flex items-center gap-4">
+      <%= form.label :keyword, "キーワード" %>
+      <%= form.text_field :keyword, value: params[:keyword], class: "border-2 border-gray-300 rounded-md p-2" %>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <%= form.radio_button :is_showing, "", checked: params[:is_showing].to_s == "" %>
+      <%= form.label :is_showing, "すべて", for: "is_showing_" %>
+
+      <%= form.radio_button :is_showing, 1, checked: params[:is_showing].to_s == "1" %>
+      <%= form.label :is_showing, "上映中", for: "is_showing_1" %>
+
+      <%= form.radio_button :is_showing, 0, checked: params[:is_showing].to_s == "0" %>
+      <%= form.label :is_showing, "上映予定", for: "is_showing_0" %>
+    </div>
+
+    <%= form.submit "検索", class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
+  <% end %>
+  <ul class="grid grid-cols-3 gap-4">
+    <% @movies.each do |movie| %>
+      <li class="border-2 border-gray-300 rounded-md p-2 flex flex-col items-center gap-2">
+        <span class="text-lg font-bold"><%= movie.name %></span>
+        <img src="<%= movie.image_url %>" alt="<%= movie.name %>">
+      </li>
+      <% end %>
+    </ul>
+</main>

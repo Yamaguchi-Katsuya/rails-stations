@@ -34,6 +34,7 @@
                 <td class="border border-gray-300 p-2">
                     <%= link_to "詳細", admin_movie_path(movie), class: "bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600" %>
                     <%= link_to "編集", edit_admin_movie_path(movie), class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
+                    <%= link_to "削除", admin_movie_path(movie), method: :delete, class: "bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" %>
                 </td>
             </tr>
             <% end %>

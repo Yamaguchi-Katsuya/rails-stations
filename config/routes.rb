@@ -18,9 +18,13 @@ Rails.application.routes.draw do
 
   get "movies/:id/reservation", to: "movies#reservation", as: "movie_reservation"
   namespace :admin do
-    resources :movies, only: [:index, :new, :create, :show, :edit, :update, :destroy] do
+    resources :reservations, only: [:index, :new, :create, :edit, :update, :destroy, :show]
+    resources :movies do
       resources :schedules, only: [:new, :create]
+      get "schedules", to: "movies#schedules", as: "schedules_json"
     end
-    resources :schedules, only: [:index, :edit, :update, :destroy]
+    resources :schedules, only: [:index, :edit, :update, :destroy] do
+      get "reserved_sheets", to: "schedules#reserved_sheets", as: "reserved_sheets_json"
+    end
   end
 end

@@ -56,6 +56,12 @@ class Admin::MoviesController < ApplicationController
     end
   end
 
+  def schedules
+    movie = Movie.includes(:schedules).find(params[:movie_id])
+    schedules = movie.schedules.map { |s| { id: s.id, time: "#{s.start_time.strftime("%H:%M")} - #{s.end_time.strftime("%H:%M")}" } }
+    render json: schedules
+  end
+
   private
 
   def movie_params

@@ -17,15 +17,29 @@
         <%= flash[:alert] %>
     </div>
     <% end %>
+    <% if flash[:notice] %>
+    <div class="text-green-500 bg-green-500 text-white border-2 border-green-500 rounded-md p-2 fixed top-0 left-0 w-auto h-auto" id="notice">
+        <%= flash[:notice] %>
+    </div>
+    <% end %>
     <%= yield %>
 </body>
 
 <script>
-    const element = document.getElementById("alert");
-    element.style.transition = "opacity 1s ease-in-out";
-    setTimeout(() => {
-        element.style.opacity = "0";
-    }, 3000);
+    const alertElement = document.getElementById("alert");
+    if (alertElement) {
+        alertElement.style.transition = "opacity 1s ease-in-out";
+        setTimeout(() => {
+            alertElement.style.opacity = "0";
+        }, 3000);
+    }
+    const noticeElement = document.getElementById("notice");
+    if (noticeElement) {
+        noticeElement.style.transition = "opacity 1s ease-in-out";
+        setTimeout(() => {
+            noticeElement.style.opacity = "0";
+        }, 3000);
+    }
 </script>
 
 </html>

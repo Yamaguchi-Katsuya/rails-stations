@@ -1,0 +1,28 @@
+<main class="mx-auto px-4 py-8 flex flex-col items-center gap-4">
+    <h1 class="text-2xl font-bold mb-4">予約編集</h1>
+    <%= form_with model: @reservation, url: admin_reservation_path(@reservation), method: :patch, class: "flex flex-col items-center gap-4 w-1/2 mx-auto" do |form| %>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+        <%= form.label :date, "日付", class: "col-span-1" %>
+        <%= form.date_field :date, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+        <%= form.label :schedule_id, "上映時間", class: "col-span-1" %>
+        <%= form.select :schedule_id, options_for_select(@reservation.schedule.movie.schedules.map { |schedule| [schedule.start_time.strftime("%H:%M") + " - " + schedule.end_time.strftime("%H:%M"), schedule.id] }, @reservation.schedule.id), {}, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+        <%= form.label :sheet_id, "座席", class: "col-span-1" %>
+        <%= form.select :sheet_id, options_for_select(@sheets.map { |sheet| @reserved_sheets.include?(sheet.id) ? sheet.id == @reservation.sheet.id ? [sheet.column.to_s + sheet.row.to_s + " (現在予約中)", sheet.id] : [sheet.column.to_s + sheet.row.to_s + " (予約不可)", sheet.id] : [sheet.column.to_s + sheet.row.to_s, sheet.id] }, @reservation.sheet.id), {}, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+        <%= form.label :email, "メールアドレス", class: "col-span-1" %>
+        <%= form.email_field :email, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+        <%= form.label :name, "名前", class: "col-span-1" %>
+        <%= form.text_field :name, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+    </div>
+    <%= form.submit "更新", class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
+    <% end %>
+    <%= link_to "予約削除", admin_reservation_path(@reservation), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" %>
+    <%= link_to "予約一覧に戻る", admin_reservations_path, class: "bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600" %>
+</main>

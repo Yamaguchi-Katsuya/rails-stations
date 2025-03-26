@@ -20,6 +20,7 @@
         </div>
     </section>
 
+    <% if @movie.schedules.any? %>
     <section class="flex flex-col items-center gap-6 w-1/2 mx-auto">
         <h2 class="text-2xl font-bold">予約</h2>
         <%= form_with url: movie_reservation_path(@movie), method: :get, class: "flex flex-col items-center gap-2" do |form| %>
@@ -30,6 +31,7 @@
         <%= form.submit "座席を予約する", class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
         <% end %>
     </section>
-
-
+    <% else %>
+    <p>上映時間が公開されるまでもうしばらくお待ちください</p>
+    <% end %>
 </main>

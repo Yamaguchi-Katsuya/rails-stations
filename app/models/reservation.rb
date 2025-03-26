@@ -4,7 +4,7 @@ class Reservation < ApplicationRecord
 
   validates :email, presence: true, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }
   validates :name, presence: true, length: { maximum: 50 }
-  validates :date, presence: true
+  validates :date, presence: true, uniqueness: { scope: [:schedule_id, :sheet_id] }
   validates :schedule_id, presence: true
   validates :sheet_id, presence: true
 

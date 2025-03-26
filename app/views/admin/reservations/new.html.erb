@@ -1,0 +1,105 @@
+<main class="mx-auto px-4 py-8 flex flex-col items-center gap-4">
+    <h1 class="text-2xl font-bold mb-4">予約作成</h1>
+
+    <%= form_with model: @reservation, url: admin_reservations_path(@reservation), method: :post, class: "flex flex-col items-center gap-4 w-1/2 mx-auto" do |form| %>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+        <%= form.label :date, "日付", class: "col-span-1" %>
+        <%= form.date_field :date, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+        <%= form.label :movie_id, "映画", class: "col-span-1" %>
+        <%= form.select :movie_id, options_for_select(@movies.map { |movie| [movie.name, movie.id] }), {}, class: "border-2 border-gray-300 rounded-md p-2 col-span-4", id: "movie-select" %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+        <%= form.label :schedule_id, "上映時間", class: "col-span-1" %>
+        <%= form.select :schedule_id, options_for_select(@schedules.map { |s| [s.start_time.strftime("%H:%M") + " - " + s.end_time.strftime("%H:%M"), s.id] }), {}, class: "border-2 border-gray-300 rounded-md p-2 col-span-4", id: "schedule-select" %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+        <%= form.label :sheet_id, "座席", class: "col-span-1" %>
+        <%= form.select :sheet_id, options_for_select(@sheets.map { |sheet| [sheet.column.to_s + sheet.row.to_s, sheet.id] }), {}, class: "border-2 border-gray-300 rounded-md p-2 col-span-4", id: "sheet-select" %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+        <%= form.label :email, "メールアドレス", class: "col-span-1" %>
+        <%= form.email_field :email, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+    </div>
+    <div class="grid grid-cols-5 items-center gap-2 w-full">
+        <%= form.label :name, "名前", class: "col-span-1" %>
+        <%= form.text_field :name, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+    </div>
+    <%= form.submit "予約作成", class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
+    <% end %>
+    <%= link_to "予約一覧に戻る", admin_reservations_path, class: "bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600" %>
+</main>
+
+<script>
+    const setSchedule = async (movieId, scheduleSelect) => {
+        try {
+            const response = await fetch(`/admin/movies/${movieId}/schedules`);
+            const schedules = await response.json();
+
+            scheduleSelect.innerHTML = "";
+            schedules.forEach(schedule => {
+                const option = document.createElement("option");
+                option.value = schedule.id;
+                option.textContent = schedule.time;
+                if (schedule.id === schedules[0].id) {
+                    option.selected = true;
+                }
+                scheduleSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error("スケジュール取得エラー:", error);
+        }
+    };
+
+    const updateReservedSheets = async (scheduleId, sheetSelect) => {
+        try {
+            const response = await fetch(`/admin/schedules/${scheduleId}/reserved_sheets`);
+            const reservedSheets = await response.json();
+
+            Array.from(sheetSelect.options).forEach((option) => {
+                const sheetId = parseInt(option.value, 10);
+                if (reservedSheets.includes(sheetId)) {
+                    option.textContent = `${option.textContent.replace(" (予約不可)", "")} (予約不可)`;
+                    option.disabled = true;
+                } else {
+                    option.textContent = option.textContent.replace(" (予約不可)", "");
+                    option.disabled = false;
+                }
+            });
+        } catch (error) {
+            console.error("予約済み座席取得エラー:", error);
+        }
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const movieSelect = document.getElementById("movie-select");
+        const scheduleSelect = document.getElementById("schedule-select");
+        const sheetSelect = document.getElementById("sheet-select");
+        if (movieSelect && movieSelect.value) {
+            setSchedule(movieSelect.value, scheduleSelect);
+            console.log(12);
+            console.log(scheduleSelect.value);
+            if (scheduleSelect && scheduleSelect.value) {
+                updateReservedSheets(scheduleSelect.value, sheetSelect);
+            }
+        }
+
+        movieSelect.addEventListener("change", async () => {
+            const movieId = movieSelect.value;
+            if (!movieId) return;
+
+            await setSchedule(movieId, scheduleSelect);
+            if (scheduleSelect && scheduleSelect.value) {
+                await updateReservedSheets(scheduleSelect.value, sheetSelect);
+            }
+        });
+
+        scheduleSelect.addEventListener("change", async () => {
+            const scheduleId = scheduleSelect.value;
+            if (!scheduleId) return;
+
+            await updateReservedSheets(scheduleId, sheetSelect);
+        });
+    });
+</script>

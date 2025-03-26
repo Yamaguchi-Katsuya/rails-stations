@@ -41,9 +41,10 @@ class Admin::SchedulesController < ApplicationController
     redirect_to admin_schedules_path, alert: "上映スケジュールが見つかりません"
   end
 
-  def reserved_sheets
-    reserved_sheets = Reservation.where(schedule_id: params[:schedule_id]).pluck(:sheet_id)
-    render json: reserved_sheets
+  def unavailable_sheets
+    logger.info("unavailable_sheets date: #{params[:date]}")
+    unavailable_sheets = Reservation.unavailable_sheets(params[:schedule_id], params[:date])
+    render json: unavailable_sheets
   end
 
 

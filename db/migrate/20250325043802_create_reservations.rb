@@ -8,7 +8,7 @@ class CreateReservations < ActiveRecord::Migration[7.1]
       t.string :name, null: false
       t.timestamps
 
-      t.index [:date, :schedule_id, :sheet_id], unique: true
+      t.index [:date, :schedule_id, :sheet_id, :screen_id], unique: true
     end
   end
 end

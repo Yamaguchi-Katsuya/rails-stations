@@ -20,7 +20,7 @@
                 <% @sheetGroups.each do |row, sheetGroup| %>
                 <tr>
                     <% sheetGroup.each do |sheet| %>
-                    <% if @reserved_sheets.include?(sheet.id) %>
+                    <% if @unavailable_sheets.include?(sheet.id) %>
                     <td class="w-1/5 text-center border-2 border-gray-700 bg-red-500 text-xl text-white py-2">
                         <%= sheet.column.to_s + sheet.row.to_s %>
                     </td>

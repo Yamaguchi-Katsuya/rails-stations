@@ -4,7 +4,7 @@
     <%= form_with model: @reservation, url: admin_reservations_path(@reservation), method: :post, class: "flex flex-col items-center gap-4 w-1/2 mx-auto" do |form| %>
     <div class="grid grid-cols-5 items-center gap-2 w-full">
         <%= form.label :date, "日付", class: "col-span-1" %>
-        <%= form.date_field :date, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+        <%= form.date_field :date, class: "border-2 border-gray-300 rounded-md p-2 col-span-4", id: "js-date" %>
     </div>
     <div class="grid grid-cols-5 items-center gap-2 w-full">
         <%= form.label :movie_id, "映画", class: "col-span-1" %>
@@ -52,14 +52,15 @@
         }
     };
 
-    const updateReservedSheets = async (scheduleId, sheetSelect) => {
+    const updateReservedSheets = async (scheduleId, sheetSelect, date) => {
         try {
-            const response = await fetch(`/admin/schedules/${scheduleId}/reserved_sheets`);
-            const reservedSheets = await response.json();
+            const response = await fetch(`/admin/schedules/${scheduleId}/unavailable_sheets?date=${date}`);
+            const unavailableSheets = await response.json();
+            console.log(unavailableSheets);
 
             Array.from(sheetSelect.options).forEach((option) => {
                 const sheetId = parseInt(option.value, 10);
-                if (reservedSheets.includes(sheetId)) {
+                if (unavailableSheets.includes(sheetId)) {
                     option.textContent = `${option.textContent.replace(" (予約不可)", "")} (予約不可)`;
                     option.disabled = true;
                 } else {
@@ -68,7 +69,7 @@
                 }
             });
         } catch (error) {
-            console.error("予約済み座席取得エラー:", error);
+            console.error("予約不可座席取得エラー:", error);
         }
     };
 
@@ -76,30 +77,38 @@
         const movieSelect = document.getElementById("movie-select");
         const scheduleSelect = document.getElementById("schedule-select");
         const sheetSelect = document.getElementById("sheet-select");
+        const dateElement = document.getElementById("js-date");
         if (movieSelect && movieSelect.value) {
             setSchedule(movieSelect.value, scheduleSelect);
-            console.log(12);
-            console.log(scheduleSelect.value);
-            if (scheduleSelect && scheduleSelect.value) {
-                updateReservedSheets(scheduleSelect.value, sheetSelect);
+            if (scheduleSelect && scheduleSelect.value && dateElement && dateElement.value) {
+                updateReservedSheets(scheduleSelect.value, sheetSelect, dateElement.value);
             }
         }
 
-        movieSelect.addEventListener("change", async () => {
-            const movieId = movieSelect.value;
+        movieSelect.addEventListener("change", async (event) => {
+            const movieId = event.target.value;
             if (!movieId) return;
 
             await setSchedule(movieId, scheduleSelect);
-            if (scheduleSelect && scheduleSelect.value) {
+            if (scheduleSelect && scheduleSelect.value && dateElement && dateElement.value) {
                 await updateReservedSheets(scheduleSelect.value, sheetSelect);
             }
         });
 
-        scheduleSelect.addEventListener("change", async () => {
-            const scheduleId = scheduleSelect.value;
+        scheduleSelect.addEventListener("change", async (event) => {
+            const scheduleId = event.target.value;
             if (!scheduleId) return;
+            if (dateElement && dateElement.value) {
+                await updateReservedSheets(scheduleId, sheetSelect, dateElement.value);
+            }
+        });
 
-            await updateReservedSheets(scheduleId, sheetSelect);
+        dateElement.addEventListener("change", async (event) => {
+            const date = event.target.value;
+            if (!date) return;
+            if (scheduleSelect && scheduleSelect.value) {
+                await updateReservedSheets(scheduleSelect.value, sheetSelect, date);
+            }
         });
     });
 </script>

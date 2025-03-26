@@ -36,7 +36,7 @@ class MoviesController < ApplicationController
       return
     end
 
-    @reserved_sheets = Reservation.reserved_sheets(@schedule.id, @date)
+    @unavailable_sheets = Reservation.unavailable_sheets(@schedule.id, @date)
     @sheets = Sheet.order(column: :asc, row: :asc)
     @sheetGroups = @sheets.group_by(&:row)
 

@@ -15,11 +15,13 @@ class ReservationsController < ApplicationController
   def create
     set_sheet(params["reservation"][:sheet_id])
     @date = params["reservation"][:date]
-    if Reservation.is_reserved?(@schedule.id, @sheet.id, @date)
+    @screen_id = Reservation.find_available_screen_or_full(@schedule.id, @sheet.id, @date)
+    if @screen_id == false # false の場合は座席がすでに予約済み
       redirect_to movie_reservation_path(@movie, schedule_id: @schedule.id, date: @date), alert: "その座席はすでに予約済みです"
       return
     end
     @reservation = Reservation.new(reservation_params)
+    @reservation.screen_id = @screen_id
     if @reservation.save
       redirect_to movie_path(@movie), notice: "予約が完了しました"
     else

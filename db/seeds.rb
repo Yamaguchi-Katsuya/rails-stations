@@ -17,3 +17,12 @@ p '============ sheet create start ============='
 end
 
 p '============ sheet create end ============='
+
+
+p '============ screen create start ============='
+
+Screen.create(name: 'Screen 1', description: 'Screen 1 description')
+Screen.create(name: 'Screen 2', description: 'Screen 2 description')
+Screen.create(name: 'Screen 3', description: 'Screen 3 description')
+
+p '============ screen create end ============='

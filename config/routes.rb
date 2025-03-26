@@ -24,7 +24,7 @@ Rails.application.routes.draw do
       get "schedules", to: "movies#schedules", as: "schedules_json"
     end
     resources :schedules, only: [:index, :edit, :update, :destroy] do
-      get "reserved_sheets", to: "schedules#reserved_sheets", as: "reserved_sheets_json"
+      get "unavailable_sheets", to: "schedules#unavailable_sheets", as: "unavailable_sheets_json"
     end
   end
 end

@@ -16,11 +16,13 @@ class Admin::ReservationsController < ApplicationController
   end
 
   def create
-    if Reservation.is_reserved?(params[:reservation][:schedule_id], params[:reservation][:sheet_id], params[:reservation][:date])
+    @screen_id = Reservation.find_available_screen_or_full(params[:reservation][:schedule_id], params[:reservation][:sheet_id], params[:reservation][:date])
+    if @screen_id == false # false の場合は座席がすでに予約済み
       redirect_to admin_reservations_path, alert: "その座席はすでに予約済みです"
       return
     end
     @reservation = Reservation.new(reservation_params)
+    @reservation.screen_id = @screen_id
     if @reservation.save
       redirect_to admin_reservations_path, notice: "予約を作成しました"
     else
@@ -36,7 +38,7 @@ class Admin::ReservationsController < ApplicationController
 
   def edit
     @reservation = Reservation.where(id: params[:id]).includes(:sheet, schedule: [movie: [:schedules]]).first
-    @reserved_sheets = Reservation.reserved_sheets(@reservation.schedule.id, @reservation.date)
+    @unavailable_sheets = Reservation.unavailable_sheets(@reservation.schedule.id, @reservation.date)
     @sheets = Sheet.order(row: :asc, column: :asc)
   rescue ActiveRecord::RecordNotFound
     redirect_to admin_reservations_path, alert: "予約が見つかりません"
@@ -44,6 +46,11 @@ class Admin::ReservationsController < ApplicationController
 
   def update
     @reservation = Reservation.find(params[:id])
+    @screen_id = Reservation.find_available_screen_or_full(params[:reservation][:schedule_id], params[:reservation][:sheet_id], params[:reservation][:date])
+    if @screen_id == false # false の場合は座席がすでに予約済み
+      redirect_to admin_reservations_path, alert: "その座席はすでに予約済みです"
+      return
+    end
     if @reservation.update(reservation_params)
       redirect_to admin_reservations_path, notice: "予約を更新しました"
     else

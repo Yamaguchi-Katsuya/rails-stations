@@ -1,0 +1,14 @@
+<header class="bg-gray-800 text-white p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">
+        <%= link_to "映画予約システム", movies_path, class: "text-white hover:text-gray-300" %>
+    </h1>
+    <div class="flex items-center gap-4">
+        <% if user_signed_in? %>
+        <p class="text-white"><%= current_user.name %>さん</p>
+        <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "text-white hover:text-gray-300" %>
+        <% else %>
+        <%= link_to "ログイン", new_user_session_path, class: "text-white hover:text-gray-300 border-2 border-white rounded-md px-4 py-2" %>
+        <%= link_to "新規登録", new_user_registration_path, class: "text-white hover:text-gray-300 border-2 border-white rounded-md px-4 py-2" %>
+    </div>
+    <% end %>
+</header>

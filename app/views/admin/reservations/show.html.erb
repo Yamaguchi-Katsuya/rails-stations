@@ -2,8 +2,8 @@
     <h1 class="my-8 text-4xl font-bold">予約詳細</h1>
     <div class="flex flex-col items-center gap-4">
         <p>映画名: <%= @reservation.schedule.movie.name %></p>
-        <p>名前: <%= @reservation.name %></p>
-        <p>メールアドレス: <%= @reservation.email %></p>
+        <p>名前: <%= @reservation.user.name %></p>
+        <p>メールアドレス: <%= @reservation.user.email %></p>
         <p>座席: <%= @reservation.sheet.column %><%= @reservation.sheet.row %></p>
         <p>上映日: <%= @reservation.date %></p>
         <p>上映時間: <%= @reservation.schedule.start_time.strftime("%H:%M") %> - <%= @reservation.schedule.end_time.strftime("%H:%M") %></p>

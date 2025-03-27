@@ -19,12 +19,8 @@
         <%= form.select :sheet_id, options_for_select(@sheets.map { |sheet| [sheet.column.to_s + sheet.row.to_s, sheet.id] }), {}, class: "border-2 border-gray-300 rounded-md p-2 col-span-4", id: "sheet-select" %>
     </div>
     <div class="grid grid-cols-5 items-center gap-2 w-full">
-        <%= form.label :email, "メールアドレス", class: "col-span-1" %>
-        <%= form.email_field :email, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
-    </div>
-    <div class="grid grid-cols-5 items-center gap-2 w-full">
-        <%= form.label :name, "名前", class: "col-span-1" %>
-        <%= form.text_field :name, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
+        <%= form.label :user_id, "お客様", class: "col-span-1" %>
+        <%= form.select :user_id, options_for_select(@users.map { |user| [user.name, user.id] }), {}, class: "border-2 border-gray-300 rounded-md p-2 col-span-4", id: "user-select" %>
     </div>
     <%= form.submit "予約作成", class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
     <% end %>

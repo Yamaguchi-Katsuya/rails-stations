@@ -1,6 +1,7 @@
 class ReservationsController < ApplicationController
   before_action :set_movie
   before_action :set_schedule
+  before_action :authenticate_user!
 
   def new
     if params[:sheet_id].blank? || params[:date].blank?
@@ -22,6 +23,7 @@ class ReservationsController < ApplicationController
     end
     @reservation = Reservation.new(reservation_params)
     @reservation.screen_id = @screen_id
+    @reservation.user_id = current_user.id
     if @reservation.save
       redirect_to movie_path(@movie), notice: "予約が完了しました"
     else
@@ -52,7 +54,7 @@ class ReservationsController < ApplicationController
   end
 
   def reservation_params
-    params.require(:reservation).permit(:date, :schedule_id, :sheet_id, :email, :name)
+    params.require(:reservation).permit(:date, :schedule_id, :sheet_id)
   end
 
 end

@@ -7,6 +7,8 @@ class Schedule < ApplicationRecord
   private
 
   def start_time_must_be_before_end_time
+    return if start_time.nil? || end_time.nil?
+
     if start_time >= end_time
       errors.add(:start_time, "は上映終了時刻より前にしてください")
     end

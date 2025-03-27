@@ -1,4 +1,4 @@
-class Admin::ReservationsController < ApplicationController
+class Admin::ReservationsController < Admin::BaseController
   def index
     today = Date.today
     @reservations = Reservation
@@ -13,6 +13,7 @@ class Admin::ReservationsController < ApplicationController
     @sheets = Sheet.order(row: :asc, column: :asc)
     @movies = Movie.includes(:schedules).all
     @schedules = Schedule.all
+    @users = User.all
   end
 
   def create
@@ -31,15 +32,16 @@ class Admin::ReservationsController < ApplicationController
   end
 
   def show
-    @reservation = Reservation.where(id: params[:id]).includes(:sheet, schedule: [:movie]).first
+    @reservation = Reservation.where(id: params[:id]).includes(:sheet, :user, schedule: [:movie]).first
   rescue ActiveRecord::RecordNotFound
     redirect_to admin_reservations_path, alert: "予約が見つかりません"
   end
 
   def edit
-    @reservation = Reservation.where(id: params[:id]).includes(:sheet, schedule: [movie: [:schedules]]).first
+    @reservation = Reservation.where(id: params[:id]).includes(:sheet, :user, schedule: [movie: [:schedules]]).first
     @unavailable_sheets = Reservation.unavailable_sheets(@reservation.schedule.id, @reservation.date)
     @sheets = Sheet.order(row: :asc, column: :asc)
+    @users = User.all
   rescue ActiveRecord::RecordNotFound
     redirect_to admin_reservations_path, alert: "予約が見つかりません"
   end
@@ -74,6 +76,6 @@ class Admin::ReservationsController < ApplicationController
   private
 
   def reservation_params
-    params.require(:reservation).permit(:sheet_id, :date, :schedule_id, :email, :name)
+    params.require(:reservation).permit(:sheet_id, :date, :schedule_id, :user_id)
   end
 end

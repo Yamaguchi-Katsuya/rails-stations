@@ -1,4 +1,4 @@
-class Admin::SchedulesController < ApplicationController
+class Admin::SchedulesController < Admin::BaseController
   before_action :set_movie, only: [:new, :create]
 
   def index

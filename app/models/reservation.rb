@@ -2,13 +2,13 @@ class Reservation < ApplicationRecord
   belongs_to :schedule
   belongs_to :sheet
   belongs_to :screen
+  belongs_to :user
 
-  validates :email, presence: true, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }
-  validates :name, presence: true, length: { maximum: 50 }
   validates :date, presence: true, uniqueness: { scope: [:schedule_id, :sheet_id, :screen_id] }
   validates :schedule_id, presence: true
   validates :sheet_id, presence: true
   validates :screen_id, presence: true
+  validates :user_id, presence: true
 
   def self.is_reserved?(schedule_id, sheet_id, date)
     Reservation.exists?(schedule_id: schedule_id, sheet_id: sheet_id, date: date)

@@ -12,22 +12,10 @@
         <p>日付：<%= @date.to_date.strftime("%Y/%m/%d") %></p>
         <p>上映時間：<%= @schedule.start_time.strftime("%H:%M") %> - <%= @schedule.end_time.strftime("%H:%M") %></p>
         <p>座席：<%= @sheet.column.to_s + @sheet.row.to_s %></p>
-    </div>
-    <div class="grid grid-cols-5 items-center gap-2 w-full">
-        <%= form.label :email, "メールアドレス", class: "col-span-1" %>
-        <%= form.email_field :email, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
-        <% @reservation.errors.full_messages_for(:email).each do |msg| %>
-        <div class="error-text"><%= msg %></div>
-        <% end %>
-    </div>
-    <div class="grid grid-cols-5 items-center gap-2 w-full">
-        <%= form.label :name, "名前", class: "col-span-1" %>
-        <%= form.text_field :name, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
-        <% @reservation.errors.full_messages_for(:name).each do |msg| %>
-        <div class="error-text"><%= msg %></div>
-        <% end %>
+        <p>お名前：<%= current_user.name %></p>
+        <p>メールアドレス：<%= current_user.email %></p>
     </div>
 
-    <%= form.submit "作成", class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
+    <%= form.submit "確定", class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
     <% end %>
 </main>

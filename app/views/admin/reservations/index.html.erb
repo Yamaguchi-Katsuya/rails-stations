@@ -1,5 +1,6 @@
 <main class="mx-auto px-4 py-8 flex flex-col items-center gap-4">
     <h1 class="text-2xl font-bold mb-4">予約一覧</h1>
+    <%= link_to "新規予約作成", new_admin_reservation_path, class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
     <table class="mx-auto border-collapse border border-gray-300 table-auto">
         <thead>
             <tr>
@@ -18,8 +19,8 @@
                 <td class="border border-gray-300 p-2"><%= reservation.date.to_date.strftime("%Y/%m/%d") %> <%= reservation.schedule.start_time.strftime("%H:%M") %>-<%= reservation.schedule.end_time.strftime("%H:%M") %></td>
                 <td class="border border-gray-300 p-2"><%= reservation.schedule.movie.name %></td>
                 <td class="border border-gray-300 p-2"><%= reservation.sheet.column %><%= reservation.sheet.row %></td>
-                <td class="border border-gray-300 p-2"><%= reservation.name %></td>
-                <td class="border border-gray-300 p-2"><%= reservation.email %></td>
+                <td class="border border-gray-300 p-2"><%= reservation.user.name %></td>
+                <td class="border border-gray-300 p-2"><%= reservation.user.email %></td>
                 <td class="border border-gray-300 p-2"><%= reservation.created_at.strftime("%Y/%m/%d %H:%M") %></td>
                 <td class="border border-gray-300 p-2">
                     <%= link_to "詳細", admin_reservation_path(reservation), class: "bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600" %>

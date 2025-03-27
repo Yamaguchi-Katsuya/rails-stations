@@ -5,17 +5,17 @@
     <div class="grid grid-cols-5 items-center gap-2 w-full">
         <%= form.label :start_time, "開始時間", class: "col-span-1" %>
         <%= form.time_field :start_time, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
-        <% @movie.errors.full_messages_for(:start_time).each do |msg| %>
-        <div class="error-text"><%= msg %></div>
-        <% end %>
     </div>
+    <% @schedule.errors.full_messages_for(:start_time).each do |msg| %>
+    <p class="text-red-500"><%= msg %></p>
+    <% end %>
     <div class="grid grid-cols-5 items-center gap-2 w-full">
         <%= form.label :end_time, "終了時間", class: "col-span-1" %>
         <%= form.time_field :end_time, class: "border-2 border-gray-300 rounded-md p-2 col-span-4" %>
-        <% @movie.errors.full_messages_for(:end_time).each do |msg| %>
-        <div class="error-text"><%= msg %></div>
-        <% end %>
     </div>
+    <% @schedule.errors.full_messages_for(:end_time).each do |msg| %>
+    <p class="text-red-500"><%= msg %></p>
+    <% end %>
 
     <%= form.submit "作成", class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" %>
     <% end %>
